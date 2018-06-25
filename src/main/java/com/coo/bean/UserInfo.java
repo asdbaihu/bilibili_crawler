@@ -1,52 +1,27 @@
 package com.coo.bean;
 
-import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.model.ConsolePageModelPipeline;
-import us.codecraft.webmagic.model.OOSpider;
-import us.codecraft.webmagic.model.annotation.ExtractBy;
-import us.codecraft.webmagic.model.annotation.Formatter;
-import us.codecraft.webmagic.model.annotation.TargetUrl;
-
 import java.util.Date;
 
-@TargetUrl({"http://space.bilibili.com/ajax/member/GetInfo?mid=1"
-                    ,"https://api.bilibili.com/x/relation/stat?vmid=1&jsonp=jsonp"
-                    ,"https://api.bilibili.com/x/space/upstat?mid=1&jsonp=jsonp"})
+/**
+ * @Author: cooocy
+ * @Date: 2018/6/25 17:33
+ **/
 public class UserInfo {
 
-    public static void main(String[] args) {
-        OOSpider.create(Site.me().setSleepTime(1000)
-                , new ConsolePageModelPipeline(), UserInfo.class)
-                .addUrl("http://space.bilibili.com/ajax/member/GetInfo?mid=1").thread(1).run();
-    }
-
     // =========================================================================
-    // https://space.bilibili.com/ajax/member/GetInfo
+    // http://space.bilibili.com/ajax/member/GetInfo?mid=1
+    // {"status":true,"data":{"mid":1,"name":"bishi","sex":"\u7537","rank":10000,"face":"http:\/\/i2.hdslb.com\/bfs\/face\/34c5b30a990c7ce4a809626d8153fa7895ec7b63.gif","regtime":1245823614,"spacesta":0,"birthday":"09-19","sign":"","level_info":{"current_level":4},"official_verify":{"type":-1,"desc":"","suffix":""},"vip":{"vipType":1,"vipStatus":0},"toutu":"bfs\/space\/768cc4fd97618cf589d23c2711a1d1a729f42235.png","toutuId":1,"theme":"default","theme_preview":"","coins":0,"im9_sign":"f2d814399e93b822431eeb838118c455","fans_badge":false}}
     // =========================================================================
-    @ExtractBy(type = ExtractBy.Type.JsonPath, value = "mid")
     private int mid;
-
-    @ExtractBy(type = ExtractBy.Type.JsonPath, value = "name")
     private String name;
-
     private String sex;
-
     private String face;
-
     private Date regtime;
-
-    @ExtractBy(type = ExtractBy.Type.JsonPath, value = "birthday")
-    @Formatter("yyyy-MM-dd HH:mm")
     private Date birthday;
-
     private String sign;
-
     private String current_level;
-
     private int vipType;
-
     private int vipStatus;
-
     private int coins;
 
 
@@ -55,19 +30,15 @@ public class UserInfo {
     // {"code":0,"message":"0","ttl":1,"data":{"mid":1,"following":0,"whisper":0,"black":0,"follower":24579}}
     // =========================================================================
     private int whisper;    // 耳语
-
-    @ExtractBy(type = ExtractBy.Type.JsonPath, value = "following")
     private int following;  // 关注
-
     private int follower;   // 粉丝
+    private int black;  // 黑名单
 
     // =========================================================================
     // https://api.bilibili.com/x/space/upstat?mid=1&jsonp=jsonp
-    // {"code":0,"message":"0","ttl":1,"data":{"archive":{"view":archive},"article":{"view":0}}}
+    // {"code":0,"message":"0","ttl":1,"data":{"archive":{"view":1076798},"article":{"view":0}}}
     // =========================================================================
-    @ExtractBy(type = ExtractBy.Type.JsonPath, value = "archive.view")
     private int archive_view;   // 视频播放数
-
     private int article_view;   // 文章阅读量
 
 
@@ -183,6 +154,14 @@ public class UserInfo {
         this.follower = follower;
     }
 
+    public int getBlack() {
+        return black;
+    }
+
+    public void setBlack(int black) {
+        this.black = black;
+    }
+
     public int getArchive_view() {
         return archive_view;
     }
@@ -199,4 +178,26 @@ public class UserInfo {
         this.article_view = article_view;
     }
 
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "mid=" + mid +
+                ", name='" + name + '\'' +
+                ", sex='" + sex + '\'' +
+                ", face='" + face + '\'' +
+                ", regtime=" + regtime +
+                ", birthday=" + birthday +
+                ", sign='" + sign + '\'' +
+                ", current_level='" + current_level + '\'' +
+                ", vipType=" + vipType +
+                ", vipStatus=" + vipStatus +
+                ", coins=" + coins +
+                ", whisper=" + whisper +
+                ", following=" + following +
+                ", follower=" + follower +
+                ", black=" + black +
+                ", archive_view=" + archive_view +
+                ", article_view=" + article_view +
+                '}';
+    }
 }

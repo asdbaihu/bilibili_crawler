@@ -3,26 +3,25 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.example.GithubRepo;
-import us.codecraft.webmagic.model.ConsolePageModelPipeline;
 import us.codecraft.webmagic.model.HttpRequestBody;
-import us.codecraft.webmagic.model.OOSpider;
-import us.codecraft.webmagic.model.annotation.ExtractBy;
-import us.codecraft.webmagic.model.annotation.ExtractByUrl;
-import us.codecraft.webmagic.model.annotation.HelpUrl;
-import us.codecraft.webmagic.model.annotation.TargetUrl;
 import us.codecraft.webmagic.processor.PageProcessor;
-import us.codecraft.webmagic.processor.example.GithubRepoPageProcessor;
+import us.codecraft.webmagic.selector.Json;
 import us.codecraft.webmagic.utils.HttpConstant;
+import utils.ParseUtils;
 
 import java.util.Map;
 
-public class DemoTest {
+/**
+ * @Author: cooocy
+ * @Date: 2018/6/25 17:25
+ **/
+public class MainTest implements PageProcessor {
 
-    private static Site site = Site.me()
+    // 部分一：抓取网站的相关配置，包括编码、抓取间隔、重试次数等
+    Site site = Site.me()
             .setRetryTimes(3)
             .setTimeOut(30000)
-            .setSleepTime(1500)     //跟据试验，http://space.bilibili.com/ajax/member/GetInfo接口有IP接入限制，估计是60s内上限150次
+            .setSleepTime(1500)
             .setCycleRetryTimes(3)
             .setUseGzip(true)
             .addHeader("Host", "space.bilibili.com")
@@ -34,12 +33,25 @@ public class DemoTest {
             .addHeader("Content-Type", "application/x-www-form-urlencoded")
             .addHeader("Referer", "http://space.bilibili.com/10513807/");
 
+    public void process(Page page) {
+        Json baseJson = page.getJson();
+        if (!baseJson.jsonPath("status").toString().equals("true")) return;
+        UserInfo userInfo = new UserInfo();
+        ParseUtils.base2UserInfo(baseJson, userInfo);
+
+    }
+
+    public Site getSite() {
+        return site;
+    }
+
     public static void main(String[] args) {
-        OOSpider ooSpider = OOSpider.create(site, new ConsolePageModelPipeline(), UserInfo.class);
+
+        Spider spider = Spider.create(new MainTest());
         Request request = new Request("http://space.bilibili.com/ajax/member/GetInfo");
         request.setMethod(HttpConstant.Method.POST);
-        request.setRequestBody(HttpRequestBody.form(Map.of("mid", 1), "utf-8"));
-        ooSpider.addRequest(request);
-        ooSpider.thread(1).run();
+        request.setRequestBody(HttpRequestBody.form(Map.of("mid", 3553720), "utf-8"));
+        spider.addRequest(request);
+        spider.thread(1).run();
     }
 }

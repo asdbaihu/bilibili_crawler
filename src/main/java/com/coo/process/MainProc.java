@@ -1,3 +1,5 @@
+package com.coo.process;
+
 import com.coo.bean.UserInfo;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
@@ -7,7 +9,7 @@ import us.codecraft.webmagic.model.HttpRequestBody;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Json;
 import us.codecraft.webmagic.utils.HttpConstant;
-import utils.ParseUtils;
+import com.coo.utils.ParseUtils;
 
 import java.util.Map;
 
@@ -15,10 +17,9 @@ import java.util.Map;
  * @Author: cooocy
  * @Date: 2018/6/25 17:25
  **/
-public class MainTest implements PageProcessor {
+public class MainProc implements PageProcessor {
 
-    // 部分一：抓取网站的相关配置，包括编码、抓取间隔、重试次数等
-    Site site = Site.me()
+    private Site site = Site.me()
             .setRetryTimes(3)
             .setTimeOut(30000)
             .setSleepTime(1500)
@@ -38,20 +39,23 @@ public class MainTest implements PageProcessor {
         if (!baseJson.jsonPath("status").toString().equals("true")) return;
         UserInfo userInfo = new UserInfo();
         ParseUtils.base2UserInfo(baseJson, userInfo);
-
+        RelationProc.crawlerData(userInfo);
+        ViewProc.crawlerData(userInfo);
+        System.out.println(userInfo);
     }
 
     public Site getSite() {
         return site;
     }
 
-    public static void main(String[] args) {
-
-        Spider spider = Spider.create(new MainTest());
-        Request request = new Request("http://space.bilibili.com/ajax/member/GetInfo");
-        request.setMethod(HttpConstant.Method.POST);
-        request.setRequestBody(HttpRequestBody.form(Map.of("mid", 3553720), "utf-8"));
-        spider.addRequest(request);
-        spider.thread(1).run();
+    public  void crawlerData(int begin, int end, int threadNum) {
+        Spider spider = Spider.create(new MainProc());
+        for (int i = begin; i <= end; i++) {
+            Request request = new Request("http://space.bilibili.com/ajax/member/GetInfo");
+            request.setMethod(HttpConstant.Method.POST);
+            request.setRequestBody(HttpRequestBody.form(Map.of("mid", 20165629), "utf-8"));
+            spider.addRequest(request);
+        }
+        spider.thread(threadNum).run();
     }
 }

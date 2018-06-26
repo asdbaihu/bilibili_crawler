@@ -1,4 +1,4 @@
-package utils;
+package com.coo.utils;
 
 import com.coo.bean.UserInfo;
 import us.codecraft.webmagic.selector.Json;
@@ -33,15 +33,27 @@ public class ParseUtils {
     }
 
     public static void relation2UserInfo(Json json, UserInfo userInfo) {
-        userInfo.setWhisper(Integer.parseInt(json.jsonPath("data.whisper").toString()));
-        userInfo.setFollower(Integer.parseInt(json.jsonPath("data.follower").toString()));
-        userInfo.setFollowing(Integer.parseInt(json.jsonPath("data.following").toString()));
-        userInfo.setBlack(Integer.parseInt(json.jsonPath("data.black").toString()));
+        if (json.jsonPath("code").toString().equals("0")) {
+            userInfo.setWhisper(Integer.parseInt(json.jsonPath("data.whisper").toString()));
+            userInfo.setFollower(Integer.parseInt(json.jsonPath("data.follower").toString()));
+            userInfo.setFollowing(Integer.parseInt(json.jsonPath("data.following").toString()));
+            userInfo.setBlack(Integer.parseInt(json.jsonPath("data.black").toString()));
+        } else {
+            userInfo.setWhisper(-1);
+            userInfo.setFollower(-1);
+            userInfo.setFollowing(-1);
+            userInfo.setBlack(-1);
+        }
     }
 
     public static void view2UserInfo(Json json, UserInfo userInfo) {
-        userInfo.setArchive_view(Integer.parseInt(json.jsonPath("data.archive.view").toString()));
-        userInfo.setArticle_view(Integer.parseInt(json.jsonPath("data.article.view").toString()));
+        if (json.jsonPath("code").toString().equals("0")) {
+            userInfo.setArchive_view(Integer.parseInt(json.jsonPath("data.archive.view").toString()));
+            userInfo.setArticle_view(Integer.parseInt(json.jsonPath("data.article.view").toString()));
+        } else {
+            userInfo.setArchive_view(-1);
+            userInfo.setArticle_view(-1);
+        }
     }
 
     public static Date strDate2Date(String str, String format) {

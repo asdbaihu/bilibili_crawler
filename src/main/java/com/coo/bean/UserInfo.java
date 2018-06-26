@@ -4,26 +4,25 @@ import java.util.Date;
 
 /**
  * @Author: cooocy
- * @Date: 2018/6/25 17:33
+ * @Date: 2018/6/25 17:33u
  **/
 public class UserInfo {
 
     // =========================================================================
     // http://space.bilibili.com/ajax/member/GetInfo?mid=1
-    // {"status":true,"data":{"mid":1,"name":"bishi","sex":"\u7537","rank":10000,"face":"http:\/\/i2.hdslb.com\/bfs\/face\/34c5b30a990c7ce4a809626d8153fa7895ec7b63.gif","regtime":1245823614,"spacesta":0,"birthday":"09-19","sign":"","level_info":{"current_level":4},"official_verify":{"type":-1,"desc":"","suffix":""},"vip":{"vipType":1,"vipStatus":0},"toutu":"bfs\/space\/768cc4fd97618cf589d23c2711a1d1a729f42235.png","toutuId":1,"theme":"default","theme_preview":"","coins":0,"im9_sign":"f2d814399e93b822431eeb838118c455","fans_badge":false}}
+    // {"status":true,"data":{"mid":1,"name":"bishi","sex":"\u7537","rank":10000,"face":"http:\/\/i2.hdslb
     // =========================================================================
     private int mid;
     private String name;
     private String sex;
     private String face;
-    private Date regtime;
+    private Date reg_time;
     private Date birthday;
     private String sign;
-    private String current_level;
-    private int vipType;
-    private int vipStatus;
+    private int current_level;
+    private int vip_type;
+    private int vip_status;
     private int coins;
-
 
     // =========================================================================
     // https://api.bilibili.com/x/relation/stat?vmid=1&jsonp=jsonp
@@ -40,7 +39,6 @@ public class UserInfo {
     // =========================================================================
     private int archive_view;   // 视频播放数
     private int article_view;   // 文章阅读量
-
 
     public int getMid() {
         return mid;
@@ -74,16 +72,16 @@ public class UserInfo {
         this.face = face;
     }
 
-    public Date getRegtime() {
-        return regtime;
+    public java.sql.Date getReg_time() {
+        return reg_time == null ? null : new java.sql.Date(reg_time.getTime());
     }
 
-    public void setRegtime(Date regtime) {
-        this.regtime = regtime;
+    public void setReg_time(Date reg_time) {
+        this.reg_time = reg_time;
     }
 
-    public Date getBirthday() {
-        return birthday;
+    public java.sql.Date getBirthday() {
+        return birthday == null ? null : new java.sql.Date(birthday.getTime());
     }
 
     public void setBirthday(Date birthday) {
@@ -98,28 +96,28 @@ public class UserInfo {
         this.sign = sign;
     }
 
-    public String getCurrent_level() {
+    public int getCurrent_level() {
         return current_level;
     }
 
-    public void setCurrent_level(String current_level) {
+    public void setCurrent_level(int current_level) {
         this.current_level = current_level;
     }
 
-    public int getVipType() {
-        return vipType;
+    public int getVip_type() {
+        return vip_type;
     }
 
-    public void setVipType(int vipType) {
-        this.vipType = vipType;
+    public void setVip_type(int vip_type) {
+        this.vip_type = vip_type;
     }
 
-    public int getVipStatus() {
-        return vipStatus;
+    public int getVip_status() {
+        return vip_status;
     }
 
-    public void setVipStatus(int vipStatus) {
-        this.vipStatus = vipStatus;
+    public void setVip_status(int vip_status) {
+        this.vip_status = vip_status;
     }
 
     public int getCoins() {
@@ -185,12 +183,12 @@ public class UserInfo {
                 ", name='" + name + '\'' +
                 ", sex='" + sex + '\'' +
                 ", face='" + face + '\'' +
-                ", regtime=" + regtime +
+                ", reg_time=" + reg_time +
                 ", birthday=" + birthday +
                 ", sign='" + sign + '\'' +
-                ", current_level='" + current_level + '\'' +
-                ", vipType=" + vipType +
-                ", vipStatus=" + vipStatus +
+                ", current_level=" + current_level +
+                ", vip_type=" + vip_type +
+                ", vip_status=" + vip_status +
                 ", coins=" + coins +
                 ", whisper=" + whisper +
                 ", following=" + following +

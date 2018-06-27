@@ -1,7 +1,7 @@
 package com.coo.dao;
 
 import com.coo.bean.UserInfo;
-
+import org.apache.log4j.Logger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -14,12 +14,8 @@ import java.util.Date;
  **/
 public class UserInfoDao {
 
-    public static void main(String[] args) {
-        UserInfoDao userInfoDao = new UserInfoDao();
-        UserInfo userInfo = new UserInfo();
-        userInfo.setMid(1111);
-        userInfoDao.saveUserInfo(userInfo);
-    }
+    public static Logger logger = Logger.getLogger(UserInfoDao.class);
+
     public boolean saveUserInfo(UserInfo userInfo) {
         String sql = "INSERT INTO tbl_user (mid, name, sex, face, sign, current_level, vip_type, vip_status, coins" +
                 ", whisper, following, follower, black, archive_view, article_view, reg_time, birthday, create_time) " +
@@ -52,12 +48,12 @@ public class UserInfoDao {
             preparedStatement.execute();
             result = true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("ERROR:    ", e);
         } finally {
             try {
                 if (connection != null) connection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("ERROR:    ", e);
             }
             return result;
         }

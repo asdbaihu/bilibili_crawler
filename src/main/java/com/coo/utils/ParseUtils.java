@@ -1,8 +1,8 @@
 package com.coo.utils;
 
 import com.coo.bean.UserInfo;
+import org.apache.log4j.Logger;
 import us.codecraft.webmagic.selector.Json;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,6 +13,8 @@ import java.util.Locale;
  * @Date: 2018/6/25 20:25
  **/
 public class ParseUtils {
+
+    public static Logger logger = Logger.getLogger(ParseUtils.class);
 
     /**
      * 解析基本用户信息
@@ -69,7 +71,7 @@ public class ParseUtils {
         try {
             return sdf.parse(str);
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error("ERROR:    ", e);
             return null;
         }
     }
@@ -84,6 +86,7 @@ public class ParseUtils {
             Date date = new Date(Long.parseLong(timeStamp) * 1000);
             return date;
         } catch (Exception e) {
+            logger.error("ERROR:    ", e);
             return null;
         }
     }
@@ -92,6 +95,7 @@ public class ParseUtils {
         try {
             return Integer.parseInt(str);
         } catch (Exception e) {
+            logger.error("ERROR:    ", e);
             return -1;
         }
     }

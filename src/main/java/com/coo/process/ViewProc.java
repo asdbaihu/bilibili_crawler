@@ -21,8 +21,7 @@ public class ViewProc implements PageProcessor {
             .setRetryTimes(3)
             .setTimeOut(30000)
             .setSleepTime(1500)
-            .setCycleRetryTimes(3)
-            .setUseGzip(true);
+            .setCycleRetryTimes(3);
 
     @Override
     public void process(Page page) {

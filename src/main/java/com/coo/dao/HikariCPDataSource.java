@@ -1,8 +1,7 @@
 package com.coo.dao;
 
 import com.zaxxer.hikari.HikariDataSource;
-import com.zaxxer.hikari.hibernate.HikariConnectionProvider;
-
+import org.apache.log4j.Logger;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -12,10 +11,12 @@ import java.sql.SQLException;
  **/
 public class HikariCPDataSource {
 
+    public static Logger logger = Logger.getLogger(HikariCPDataSource.class);
+
     final private static String username = "";
     final private static String password = "";
     final private static String driverClassName = "org.postgresql.Driver";
-    final private static String jdbcUrl = "jdbc:postgresql://0.0.0.0:5432/db_bili";
+    final private static String jdbcUrl = "";
     private static HikariDataSource hds;
 
     static {
@@ -31,7 +32,7 @@ public class HikariCPDataSource {
         try {
             return hds.getConnection();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("ERROR:    ", e);
             return null;
         }
     }

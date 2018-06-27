@@ -2,6 +2,7 @@ package com.coo.process;
 
 import com.coo.bean.UserInfo;
 import com.coo.dao.UserInfoDao;
+import com.coo.utils.CrawlerInfo;
 import org.apache.commons.lang3.text.StrBuilder;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
@@ -42,8 +43,6 @@ public class MainProc implements PageProcessor {
             .addHeader("Referer", "http://space.bilibili.com/10513807/");
 
     private UserInfoDao userInfoDao;
-    public StringBuffer unCrawlered = new StringBuffer();
-    public List<UserInfo> unSaved = new LinkedList<>();
 
     public Site getSite() {
         return site;
@@ -51,32 +50,34 @@ public class MainProc implements PageProcessor {
 
     public void process(Page page) {
         Json json = page.getJson();
-        // 页面下载成功，但内容不对，将 mid 保存。应该是 b 站的反爬机制导致的。
+        // 页面下载成功，但内容不对，将 mid 保存到 unCrawlered 。应该是 b 站的反爬机制导致的。
         if (!json.get().startsWith("{\"status\":true,\"data\":{\"mid\":")) {
             Request request = page.getRequest();
             String url = request.getUrl();
-            unCrawlered.append(url.substring(url.indexOf("=") + 1)).append(",");
+            CrawlerInfo.unCrawlered.append(url.substring(url.indexOf("=") + 1)).append(",");
             return;
         }
+
         UserInfo userInfo = new UserInfo();
         ParseUtils.base2UserInfo(json, userInfo);
         RelationProc.crawlerData(userInfo);
         ViewProc.crawlerData(userInfo);
         userInfoDao = new UserInfoDao();
         boolean result = userInfoDao.saveUserInfo(userInfo);
-        // 保存到数据库失败
-        if (!result) unSaved.add(userInfo);
+        if (result) CrawlerInfo.mid_success_count.incrementAndGet();
+        else CrawlerInfo.unSaved.add(userInfo);
     }
 
     public void crawlerFromBegin(int begin, int end, int threadNum, MainProc mainProc) {
         spider = Spider.create(mainProc);
         for (int i = begin; i <= end; i++) {
-            StringBuilder sb = new StringBuilder("http://space.bilibili.com/ajax/member/GetInfo?mid=");
+            StringBuilder sb = new StringBuilder("http://space.b31231ilibili.com/ajax/member/GetInfo?mid=");
             sb.append(i);
             Request request = new Request(sb.toString());
             request.setMethod(HttpConstant.Method.POST);
             request.setRequestBody(HttpRequestBody.form(Map.of("mid", i), "utf-8"));
             spider.addRequest(request);
+            CrawlerInfo.mid_total_count ++;
         }
         crawlerData(threadNum);
     }
@@ -91,16 +92,25 @@ public class MainProc implements PageProcessor {
             request.setMethod(HttpConstant.Method.POST);
             request.setRequestBody(HttpRequestBody.form(Map.of("mid", mid), "utf-8"));
             spider.addRequest(request);
+            CrawlerInfo.mid_total_count ++;
         }
         crawlerData(threadNum);
     }
 
     private void crawlerData(int threadNum) {
-        HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
-        // httpClientDownloader.setProxyProvider(SimpleProxyProvider.from(
-        //         new Proxy("220.191.101.145",6666)
-        //         ,new Proxy("106.56.102.235",8070)
-        // ));
+        HttpClientDownloader httpClientDownloader = new MyDownloader();
+        httpClientDownloader.setProxyProvider(SimpleProxyProvider.from(
+                new Proxy("118.31.220.3",8080)
+                ,new Proxy("118.190.95.26",9001)
+                ,new Proxy("119.10.67.144",808)
+                ,new Proxy("61.135.217.7",80)
+                ,new Proxy("122.114.31.177",808)
+                ,new Proxy("118.190.95.35",9001)
+                ,new Proxy("118.190.95.43",9001)
+                ,new Proxy("101.236.21.22",8866)
+                ,new Proxy("139.129.99.9",3128)
+                ,new Proxy("101.236.22.141",8866)
+        ));
         spider.setDownloader(httpClientDownloader);
         spider.thread(threadNum).run();
     }

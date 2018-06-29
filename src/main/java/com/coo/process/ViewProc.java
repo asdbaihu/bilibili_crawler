@@ -1,6 +1,7 @@
 package com.coo.process;
 
 import com.coo.bean.UserInfo;
+import com.coo.downloader.OtherDownloader;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
@@ -37,6 +38,7 @@ public class ViewProc implements PageProcessor {
         ViewProc viewProc = new ViewProc();
         viewProc.userInfo = userInfo;
         Spider spider = Spider.create(viewProc);
+        spider.setDownloader(new OtherDownloader());
         Request request = new Request("https://api.bilibili.com/x/space/upstat?mid=" + viewProc.userInfo.getMid());
         request.setMethod(HttpConstant.Method.GET);
         spider.addRequest(request).run();

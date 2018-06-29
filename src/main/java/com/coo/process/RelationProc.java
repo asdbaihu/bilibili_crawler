@@ -1,6 +1,7 @@
 package com.coo.process;
 
 import com.coo.bean.UserInfo;
+import com.coo.downloader.OtherDownloader;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
@@ -38,6 +39,7 @@ public class RelationProc implements PageProcessor {
         RelationProc relationProc = new RelationProc();
         relationProc.userInfo = userInfo;
         Spider spider = Spider.create(relationProc);
+        spider.setDownloader(new OtherDownloader());
         Request request = new Request("https://api.bilibili.com/x/relation/stat?vmid=" + relationProc.userInfo.getMid());
         request.setMethod(HttpConstant.Method.GET);
         spider.addRequest(request).run();

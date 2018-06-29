@@ -5,7 +5,7 @@ import java.util.Date;
 
 /**
  * @Author: cooocy
- * @Date: 2018/6/25 17:33u
+ * @Date: 2018/6/25 17:33
  **/
 public class UserInfo implements Serializable {
 

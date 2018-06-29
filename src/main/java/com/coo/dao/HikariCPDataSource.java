@@ -13,10 +13,10 @@ public class HikariCPDataSource {
 
     public static Logger logger = Logger.getLogger(HikariCPDataSource.class);
 
-    final private static String username = "";
-    final private static String password = "";
+    final private static String username = "*";
+    final private static String password = "*";
     final private static String driverClassName = "org.postgresql.Driver";
-    final private static String jdbcUrl = "";
+    final private static String jdbcUrl = "jdbc:postgresql://*:5432/db_bili";
     private static HikariDataSource hds;
 
     static {

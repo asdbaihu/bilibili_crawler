@@ -2,8 +2,8 @@ package com.coo;
 
 import com.coo.process.MainProc;
 import com.coo.utils.CrawlerInfo;
-import com.coo.utils.SerializationUtils;
 import org.apache.log4j.Logger;
+import java.util.Date;
 
 public class Main {
 
@@ -12,11 +12,12 @@ public class Main {
         logger.info("INFO:      ");
         logger.error("ERROR:    ");
         MainProc mainProc = new MainProc();
-        mainProc.crawlerFromBegin(400001, 401000, 40, mainProc);
-        // 序列化失败数据
-        SerializationUtils.str2txt(CrawlerInfo.unCrawlered.toString(), "/logs/unCrawlered.txt");
-        SerializationUtils.serialToFile(CrawlerInfo.unSaved, "/logs/unSaved.txt");
-        // 输出全局信息
-        CrawlerInfo.writeCrawlerInfo();
+        CrawlerInfo.start_time = new Date();
+        mainProc.crawlerFromBegin(1301501, 1301701, 1, mainProc);
+        CrawlerInfo.end_time = new Date();
+        boolean result = CrawlerInfo.writeCrawlerInfo();
+        System.out.println(CrawlerInfo.unCrawlered.toString());
+        System.out.println(result);
+        System.out.println(CrawlerInfo.mid_fail_cuont.get());
     }
 }

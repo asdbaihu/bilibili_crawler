@@ -2,4 +2,4 @@
 /target/*
 /logs/*
 /crawlerInfo/*
-/src/test/*
+# /src/test/*

@@ -2,4 +2,5 @@
 /target/*
 /logs/*
 /crawlerInfo/*
+*.iml
 # /src/test/*

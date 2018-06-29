@@ -13,11 +13,9 @@ public class Main {
         logger.error("ERROR:    ");
         MainProc mainProc = new MainProc();
         CrawlerInfo.start_time = new Date();
-        mainProc.crawlerFromBegin(1301501, 1301701, 1, mainProc);
+        mainProc.crawlerFromBegin(1302000, 1303000, 80, mainProc);
         CrawlerInfo.end_time = new Date();
         boolean result = CrawlerInfo.writeCrawlerInfo();
-        System.out.println(CrawlerInfo.unCrawlered.toString());
         System.out.println(result);
-        System.out.println(CrawlerInfo.mid_fail_cuont.get());
     }
 }

@@ -15,8 +15,6 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Json;
 import us.codecraft.webmagic.utils.HttpConstant;
 import com.coo.utils.ParseUtils;
-
-import java.sql.SQLOutput;
 import java.util.Map;
 
 /**
@@ -47,11 +45,10 @@ public class MainProc implements PageProcessor {
         Json json = page.getJson();
         // 页面下载成功，但内容不对，将 mid 保存到 unCrawlered 。应该是 b 站的反爬机制导致的。
         if (!json.get().startsWith("{\"status\":true,\"data\":{\"mid\":")) {
-            System.out.println("1111111111");
             Request request = page.getRequest();
             String url = request.getUrl();
             CrawlerInfo.mid_fail_cuont.incrementAndGet();
-            CrawlerInfo.unCrawlered.append(url.substring(url.indexOf("=") + 1) + ",");
+            CrawlerInfo.unCrawlered.append(url.substring(url.indexOf("=") + 1)).append(",");
             return;
         }
 
@@ -63,10 +60,8 @@ public class MainProc implements PageProcessor {
         boolean result = userInfoDao.saveUserInfo(userInfo);
         if (result) CrawlerInfo.mid_success_count.incrementAndGet();
         else {
-            System.out.println("1111111111");
-
             CrawlerInfo.mid_fail_cuont.incrementAndGet();
-            CrawlerInfo.unCrawlered.append(userInfo.getMid() + ",");
+            CrawlerInfo.unCrawlered.append(userInfo.getMid()).append(",");
         }
     }
 

@@ -13,7 +13,7 @@ public class Main {
         logger.error("ERROR:    ");
         MainProc mainProc = new MainProc();
         CrawlerInfo.start_time = new Date();
-        mainProc.crawlerFromBegin(1302000, 1303000, 80, mainProc);
+        mainProc.crawlerFromBegin(1300000, 1400000, 20, mainProc);
         CrawlerInfo.end_time = new Date();
         boolean result = CrawlerInfo.writeCrawlerInfo();
         System.out.println(result);

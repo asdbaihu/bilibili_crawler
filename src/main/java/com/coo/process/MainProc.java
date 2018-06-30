@@ -47,7 +47,6 @@ public class MainProc implements PageProcessor {
         if (!json.get().startsWith("{\"status\":true,\"data\":{\"mid\":")) {
             Request request = page.getRequest();
             String url = request.getUrl();
-            CrawlerInfo.mid_fail_cuont.incrementAndGet();
             CrawlerInfo.unCrawlered.append(url.substring(url.indexOf("=") + 1)).append(",");
             return;
         }
@@ -59,10 +58,7 @@ public class MainProc implements PageProcessor {
         UserInfoDao userInfoDao = new UserInfoDao();
         boolean result = userInfoDao.saveUserInfo(userInfo);
         if (result) CrawlerInfo.mid_success_count.incrementAndGet();
-        else {
-            CrawlerInfo.mid_fail_cuont.incrementAndGet();
-            CrawlerInfo.unCrawlered.append(userInfo.getMid()).append(",");
-        }
+        else CrawlerInfo.unCrawlered.append(userInfo.getMid()).append(",");
     }
 
     public void crawlerFromBegin(int begin, int end, int threadNum, MainProc mainProc) {

@@ -18,10 +18,7 @@ public class MainDownloader extends HttpClientDownloader {
 
     public MainDownloader() {
         setProxyProvider(SimpleProxyProvider.from(
-                new Proxy("101.236.19.165",8866)
-                ,new Proxy("118.190.95.43",9001)
-                ,new Proxy("139.129.99.9",3128)
-                ,new Proxy("119.10.67.144",808)
+                new Proxy("http-dyn.abuyun.com",9020, "H1F7202A731E59PD", "719187705B3D83D6")
         ));
     }
 
@@ -29,7 +26,7 @@ public class MainDownloader extends HttpClientDownloader {
     public Page download(Request request, Task task) {
         Page page = super.download(request, task);
         Site site = task.getSite();
-        // 页面下载成功，但是状态码不对，也不算成功
+        // page is download successfully,but the status code is not right.
         if (page.isDownloadSuccess() && !site.getAcceptStatCode().contains(page.getStatusCode())) {
             String url = request.getUrl();
             CrawlerInfo.unCrawlered.append(url.substring(url.indexOf("=") + 1)).append(",");
@@ -41,7 +38,6 @@ public class MainDownloader extends HttpClientDownloader {
     @Override
     protected void onError(Request request) {
         String url = request.getUrl();
-        CrawlerInfo.mid_fail_cuont.incrementAndGet();
         CrawlerInfo.unCrawlered.append(url.substring(url.indexOf("=") + 1)).append(",");
     }
 }

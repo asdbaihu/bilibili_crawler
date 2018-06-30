@@ -16,7 +16,6 @@ public class CrawlerInfo {
     public static Date end_time;
     public static int mid_total_count;                      // 待爬取的 mid 总数
     public static AtomicInteger mid_success_count;
-    public static AtomicInteger mid_fail_cuont;
     public static StringBuffer unCrawlered;           // 抓取失败或页面不对或保存失败的 mid
 
     // 文件输出路径
@@ -25,7 +24,6 @@ public class CrawlerInfo {
 
     static {
         mid_success_count = new AtomicInteger();
-        mid_fail_cuont = new AtomicInteger();
         unCrawlered = new StringBuffer();
     }
 
